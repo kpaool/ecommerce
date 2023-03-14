@@ -23,8 +23,7 @@ export class CheckoutComponent implements OnInit {
     logo: "https://flutterwave.com/images/logo-colored.svg",
   };
 
-  meta = { counsumer_id: "7898", consumer_mac: "kjs9s8ss7dd" };
-
+ 
   
   //Inject the flutterwave service
   constructor(private flutterwave: Flutterwave,private apiService:ApiService,private router:Router) {
@@ -56,9 +55,8 @@ export class CheckoutComponent implements OnInit {
       tx_ref: new Date().getTime().toString(),
       amount: this.total,
       currency: "USD",
-      payment_options: "card,ussd",
-      redirect_url: "",
-      meta: this.meta,
+      payment_options: "card,ussd,credit,account,banktransfer",
+      redirect_url: "https://jinja-art-studio.web.app/success",
       customer: customerDetails,
       customizations: this.customizations,
       callback: this.makePaymentCallback,
@@ -70,6 +68,7 @@ export class CheckoutComponent implements OnInit {
   makePaymentCallback(response: PaymentSuccessResponse): void {
     console.log("Payment callback", response);
     if(response.status=="successful"){
+      localStorage.removeItem("cart")
       setTimeout(()=>{
         window.location.href = "/success";
       },3000);
